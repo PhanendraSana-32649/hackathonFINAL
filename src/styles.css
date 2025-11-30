@@ -1,0 +1,18 @@
+:root{
+  --bg:#f4f8ff;--card:#fff;--primary:#0b5ed7;--muted:#6c757d
+}
+*{box-sizing:border-box}
+body{font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:var(--bg);color:#0b2b4a}
+.container{max-width:1100px;margin:28px auto;padding:18px}
+.card{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 8px 30px rgba(11,45,80,0.06)}
+.header{display:flex;align-items:center;justify-content:space-between;padding:12px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:46px;height:46px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+.nav button{background:transparent;border:0;padding:8px 12px;border-radius:8px;color:var(--primary);cursor:pointer}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.grid-2{display:grid;grid-template-columns:1fr 320px;gap:12px}
+.small{font-size:13px;color:var(--muted)}
+.btn{background:var(--primary);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+.vote-buttons{display:flex;gap:10px}
+.vote-card{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.complaint{border-radius:10px;padding:12px;border:1px solid rgba(11,45,80,0.04);margin-bottom:10px}

@@ -1,5 +1,17 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EMS (React)</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -49,6 +61,7 @@
     .small{font-size:13px;color:var(--muted)}
     /* list */
     .user-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;border:1px solid rgba(11,45,80,0.04);margin-bottom:8px}
+    .user-row.leader{box-shadow:0 8px 30px rgba(11,94,215,0.12);border-color:rgba(11,94,215,0.18);background:linear-gradient(90deg,rgba(11,94,215,0.04),transparent)}
     .pill{padding:6px 10px;border-radius:999px;background:rgba(11,94,215,0.08);color:var(--primary);font-weight:600}
     /* votes */
     .vote-buttons{display:flex;gap:10px;margin-bottom:10px}
@@ -80,6 +93,12 @@
       canvas{max-width:100% !important;height:auto !important}
       .auth-card{width:95%}
     }
+    /* Footer */
+    .footer{margin-top:18px;padding:18px;border-radius:10px;background:linear-gradient(180deg,rgba(11,94,215,0.06),rgba(11,94,215,0.02));display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--primary)}
+    .footer .left{display:flex;flex-direction:column}
+    .footer .links{display:flex;gap:12px;align-items:center}
+    .footer a{color:var(--primary);text-decoration:none;font-weight:600}
+    @media(max-width:700px){.footer{flex-direction:column;align-items:flex-start}}
   </style>
 </head>
 <body>
@@ -128,9 +147,22 @@
             <button class="btn" onclick="openComplaintModal()">Report Issue</button>
           </div>
           <div class="card">
-            <h4>Observe Booths</h4>
-            <p class="small">Election observers can submit booth reports.</p>
-            <button class="btn" onclick="showSection('observer')">Observer Area</button>
+            <h4>Voting Contenders</h4>
+            <p class="small">See the main contenders and view details before you vote.</p>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div><strong>PARTY A</strong><div class="small">Progressive Alliance</div></div>
+                <div><button class="btn ghost" onclick="openContenderModal('PARTY A')">Details</button></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div><strong>PARTY B</strong><div class="small">Unity Front</div></div>
+                <div><button class="btn ghost" onclick="openContenderModal('PARTY B')">Details</button></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div><strong>PARTY C</strong><div class="small">Independent Group</div></div>
+                <div><button class="btn ghost" onclick="openContenderModal('PARTY C')">Details</button></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -149,7 +181,7 @@
             <button class="btn" onclick="login()">Sign In</button>
             <button class="btn ghost" onclick="showSection('signup')">Create account</button>
           </div>
-          <div class="small">Demo roles available: Admin, Citizen, Election Observer, Data Analyst</div>
+          <div class="small">Demo roles available: Admin, Citizen, Data Analyst</div>
         </div>
       </section>
 
@@ -164,7 +196,6 @@
             <select id="suRole">
               <option>Citizen</option>
               <option>Admin</option>
-              <option>Election Observer</option>
               <option>Data Analyst</option>
             </select>
           </div>
@@ -188,16 +219,16 @@
           <div>
             <div class="card vote-card">
               <div>
-                <div class="vote-buttons">
-                  <button class="btn" onclick="castVote('PARTY A')">Vote PARTY A</button>
-                  <button class="btn" onclick="castVote('PARTY B')">Vote PARTY B</button>
-                  <button class="btn" onclick="castVote('PARTY C')">Vote PARTY C</button>
-                </div>
-                <div style="margin-top:8px" class="small">Verified / Unverified votes are separated for simulation.</div>
+                    <div class="vote-buttons">
+                      <button class="btn" onclick="castVote('PARTY A')">Vote PARTY A</button>
+                      <button class="btn" onclick="castVote('PARTY B')">Vote PARTY B</button>
+                      <button class="btn" onclick="castVote('PARTY C')">Vote PARTY C</button>
+                    </div>
+                    <div style="margin-top:8px" class="small">Live simulation running — totals represent total votes per party.</div>
               </div>
               <div style="width:100%;margin-top:12px">
                 <canvas id="votesBar"></canvas>
-                <canvas id="verifyPie" style="margin-top:12px"></canvas>
+                <canvas id="votesTrend" style="margin-top:12px"></canvas>
               </div>
             </div>
 
@@ -228,19 +259,7 @@
         <div id="complaintsList"></div>
       </section>
 
-      <!-- Observer -->
-      <section id="observer" class="card" style="display:none">
-        <h3>Observer Booth Reports</h3>
-        <div class="form-group"><input id="boothId" placeholder="Booth ID"/></div>
-        <div class="form-group">
-          <select id="evmStatus"><option>Operational</option><option>Malfunction</option><option>Offline</option></select>
-        </div>
-        <div class="form-group"><input id="crowd" placeholder="Crowd (e.g., Low/Moderate/High)"/></div>
-        <div class="form-group"><textarea id="boothNotes" placeholder="Notes"></textarea></div>
-        <div class="form-group"><button class="btn" onclick="submitBooth()">Submit Report</button></div>
-        <h4>Latest Reports</h4>
-        <div id="boothList"></div>
-      </section>
+      <!-- Observer section removed as requested -->
 
       <!-- Chat -->
       <section id="chat" class="card" style="display:none">
@@ -265,6 +284,17 @@
       <div id="modalRoot" style="display:none"></div>
 
     </main>
+    <footer class="footer card" role="contentinfo">
+      <div class="left">
+        <div style="font-weight:700">Election Monitoring System</div>
+        <div class="small">© 2025 Election Monitoring System — All rights reserved</div>
+      </div>
+      <div class="links">
+        <a href="#" onclick="alert('Privacy policy (demo)')">Privacy</a>
+        <a href="#" onclick="alert('Terms of use (demo)')">Terms</a>
+        <span class="small">v1.0</span>
+      </div>
+    </footer>
   </div>
 
   <script>
@@ -276,15 +306,19 @@
       if(!ls.get('users')){
         ls.set('users',[{id:1,name:'Admin User',email:'admin@ems.local',password:'admin',role:'Admin',blocked:false},
           {id:2,name:'Citizen One',email:'citizen@ems.local',password:'citizen',role:'Citizen',blocked:false},
-          {id:3,name:'Observer One',email:'observer@ems.local',password:'observer',role:'Election Observer',blocked:false},
-          {id:4,name:'Analyst One',email:'analyst@ems.local',password:'analyst',role:'Data Analyst',blocked:false}])
+          {id:3,name:'Analyst One',email:'analyst@ems.local',password:'analyst',role:'Data Analyst',blocked:false}])
       }
       if(!ls.get('complaints')){
         const now=Date.now();
         ls.set('complaints',[{id:1,category:'Voting Machine',severity:'High',desc:'EVM stalled','location':'Ward 12','time':now-1000*60*60*24,status:'Pending'},{id:2,category:'Fights',severity:'Medium',desc:'Large crowd fighting near entrance','location':'Ward 7','time':now-1000*60*90,status:'Approved'}])
       }
       if(!ls.get('boothReports')) ls.set('boothReports',[])
-      if(!ls.get('votes')) ls.set('votes',{"PARTY A":120,"PARTY B":90,"PARTY C":75,verified:60,unverified:225})
+      if(!ls.get('votes')) ls.set('votes',{"PARTY A":120,"PARTY B":90,"PARTY C":75})
+      // initialize simple vote history snapshots for trend charts
+      if(!ls.get('voteHistory')){
+        const v=ls.get('votes',{});
+        ls.set('voteHistory',[{time:Date.now(),"PARTY A":v['PARTY A']||0,"PARTY B":v['PARTY B']||0,"PARTY C":v['PARTY C']||0}])
+      }
       if(!ls.get('blocks')) ls.set('blocks',[])
       if(!ls.get('chat')) ls.set('chat',[])
       // normalize older data if present
@@ -316,7 +350,7 @@
     // Navigation
     function showSection(id){
       // protect certain sections — require login
-      const protectedSections=['dashboard','live','complaints','observer','chat','settings']
+      const protectedSections=['dashboard','live','complaints','chat','settings']
       const user=ls.get('loggedUser')
       if(protectedSections.includes(id) && !user){alert('Please login to access this section');showSection('login');return}
       document.querySelectorAll('main section').forEach(s=>s.style.display='none')
@@ -327,7 +361,6 @@
       if(id==='dashboard') renderDashboard()
       if(id==='live') renderLive()
       if(id==='complaints') renderComplaints()
-      if(id==='observer') renderBoothList()
       if(id==='chat') renderChat()
     }
 
@@ -468,27 +501,14 @@
 
     // Observer
     function renderObserver(container){
-      container.innerHTML=`<h3>Observer Dashboard</h3><p class="small">Submit booth reports and view latest.</p><div id="observerReports"></div>`
-      renderBoothList()
+      container.innerHTML=`<h3>Observer Dashboard</h3><p class="small">Observer booth reporting has been removed from this demo. Contact an administrator for access.</p>`
     }
-    function submitBooth(){
-      if(!requireAuth('submit a booth report')) return
-      const id=document.getElementById('boothId').value.trim();
-      const evm=document.getElementById('evmStatus').value;
-      const crowd=document.getElementById('crowd').value;
-      const notes=document.getElementById('boothNotes').value;
-      if(!id||!notes){alert('Provide booth id and notes');return}
-      const arr=ls.get('boothReports',[]);
-      arr.push({id:Date.now(),booth:id,evm,crowd,notes,time:Date.now()});
-      ls.set('boothReports',arr);
-      alert('Report submitted');
-      document.getElementById('boothId').value='';document.getElementById('boothNotes').value='';renderBoothList()
-    }
-    function renderBoothList(){const root=document.getElementById('boothList')||document.getElementById('observerReports');if(!root) return;root.innerHTML='';ls.get('boothReports',[]).slice(-10).reverse().forEach(r=>{const d=document.createElement('div');d.className='complaint';d.innerHTML=`<strong>Booth ${r.booth}</strong><div class="small">${new Date(r.time).toLocaleString()} • EVM: ${r.evm} • Crowd: ${r.crowd}</div><div style="margin-top:6px">${r.notes}</div>`;root.appendChild(d)})}
+    function submitBooth(){alert('Observer booth reporting is disabled in this demo.');}
+    function renderBoothList(){/* removed - no-op */}
 
     // Data Analyst
     function renderAnalyst(container){
-      container.innerHTML=`<h3>Data Analyst Dashboard</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="card"><h4>Complaints by Category</h4><canvas id="chartCat"></canvas></div><div class="card"><h4>Severity Distribution</h4><canvas id="chartSev"></canvas></div><div class="card"><h4>Verified vs Pending Votes</h4><canvas id="chartVerify"></canvas></div><div class="card"><h4>Complaints Timeline</h4><canvas id="chartTrend"></canvas></div></div>`
+      container.innerHTML=`<h3>Data Analyst Dashboard</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="card"><h4>Complaints by Category</h4><canvas id="chartCat"></canvas></div><div class="card"><h4>Severity Distribution</h4><canvas id="chartSev"></canvas></div><div class="card"><h4>Votes Snapshot</h4><canvas id="chartVotes"></canvas></div><div class="card"><h4>Complaints Timeline</h4><canvas id="chartTrend"></canvas></div></div>`
       // build charts from data
       const complaints=ls.get('complaints',[])
       const byCat={}
@@ -499,7 +519,8 @@
       const sev=['High','Medium','Low'];const sevData=sev.map(s=>complaints.filter(c=>c.severity===s).length)
       new Chart(document.getElementById('chartSev').getContext('2d'),{type:'pie',data:{labels:sev,datasets:[{data:sevData,backgroundColor:['#dc3545','#ffc107','#198754']}]}})
 
-      const votes=ls.get('votes',{}); new Chart(document.getElementById('chartVerify').getContext('2d'),{type:'bar',data:{labels:['Verified','Unverified'],datasets:[{data:[votes.verified||0,votes.unverified||0],backgroundColor:['#198754','#6c757d']}]}})
+      const votes=ls.get('votes',{});
+      new Chart(document.getElementById('chartVotes').getContext('2d'),{type:'bar',data:{labels:['PARTY A','PARTY B','PARTY C'],datasets:[{label:'Votes',data:[votes['PARTY A']||0,votes['PARTY B']||0,votes['PARTY C']||0],backgroundColor:['#0b5ed7','#198754','#ffc107']}]},options:{responsive:true}})
 
       const groups={}
       complaints.forEach(c=>{const d=new Date(c.time);const k=d.toISOString().slice(0,10);groups[k]=(groups[k]||0)+1})
@@ -529,6 +550,22 @@
       const cat=document.getElementById('cCategory').value.trim();const sev=document.getElementById('cSeverity').value;const loc=document.getElementById('cLocation').value.trim();const desc=document.getElementById('cDesc').value.trim();
       if(!cat||!desc){alert('Category and description required');return}
       const arr=ls.get('complaints',[]);const id=Date.now();arr.push({id,category:cat,severity:sev,desc,location:loc,time:Date.now(),status:'Pending'});ls.set('complaints',arr);closeModal();alert('Complaint submitted');renderComplaints();renderDashboard()
+    }
+
+    // Contender modal & helpers
+    function openContenderModal(party){
+      const info={
+        'PARTY A':{tag:'Progressive Alliance',desc:'Focuses on economic reform, public services, and transparency.'},
+        'PARTY B':{tag:'Unity Front',desc:'Emphasizes national unity, security, and infrastructure.'},
+        'PARTY C':{tag:'Independent Group',desc:'Local grassroots movement prioritizing community issues.'}
+      };
+      const p=info[party]||{tag:'Contender',desc:''};
+      const modalRoot=document.getElementById('modalRoot');modalRoot.style.display='block';
+      modalRoot.innerHTML=`<div class="modal-backdrop"><div class="modal card"><h3>${party} • ${p.tag}</h3>
+        <div class="small" style="margin-top:8px">${p.desc}</div>
+        <div style="margin-top:12px" class="small">You can view details or cast a vote (voting requires login).</div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px"><button class="btn ghost" onclick="closeModal()">Close</button><button class="btn" onclick="castVote('${party}')">Vote for ${party}</button></div>
+        </div></div>`;
     }
 
     function renderComplaints(){
@@ -564,7 +601,7 @@
     (function(){const t=localStorage.getItem('theme')||'light';document.getElementById('app').setAttribute('data-theme',t)})();
 
     // Live Votes + blockchain log
-    let barChart, pieChart
+    let barChart, trendChart
     async function renderLive(){
       const votes=ls.get('votes',{});
       document.getElementById('votesLast').innerText=new Date().toLocaleTimeString()
@@ -572,20 +609,20 @@
       if(barChart) barChart.data.datasets[0].data=[votes['PARTY A']||0,votes['PARTY B']||0,votes['PARTY C']||0],barChart.update();
       else barChart=new Chart(ctx,{type:'bar',data:{labels:['PARTY A','PARTY B','PARTY C'],datasets:[{label:'Votes',data:[votes['PARTY A']||0,votes['PARTY B']||0,votes['PARTY C']||0],backgroundColor:['#0b5ed7','#198754','#ffc107']}]}})
 
-      const ctx2=document.getElementById('verifyPie').getContext('2d')
-      if(pieChart) pieChart.data.datasets[0].data=[votes.verified||0,votes.unverified||0],pieChart.update();
-      else pieChart=new Chart(ctx2,{type:'pie',data:{labels:['Verified','Unverified'],datasets:[{data:[votes.verified||0,votes.unverified||0],backgroundColor:['#198754','#6c757d']}]}})
+      // render the votes trend chart (per-party over time)
+      await renderVoteTrend();
 
       await renderLeaderboard();
       await renderBlocks();
     }
 
-    async function castVote(party,verified=true){
+    async function castVote(party){
       if(!requireAuth('cast a vote')) return
       const v=ls.get('votes',{});
       v[party]=(v[party]||0)+1;
-      if(verified) v.verified=(v.verified||0)+1; else v.unverified=(v.unverified||0)+1;
       ls.set('votes',v);
+      // snapshot for trend
+      pushVoteSnapshot();
       await addBlock(party);
       renderLive();
     }
@@ -594,16 +631,38 @@
     let autoSimInterval = null;
     let autoSimRunning = false;
     async function simulateAutoVote(){
+      // Add occasional deviation bursts to simulate swings between PARTY A and the others.
+      // Small chance to produce a burst (multiple votes) biased toward PARTY A or toward other parties.
       const parties=['PARTY A','PARTY B','PARTY C'];
-      const p=parties[Math.floor(Math.random()*parties.length)];
-      const verified=Math.random()>0.5;
-      // directly update votes without requireAuth
-      const v=ls.get('votes',{});
-      v[p]=(v[p]||0)+1;
-      if(verified) v.verified=(v.verified||0)+1; else v.unverified=(v.unverified||0)+1;
-      ls.set('votes',v);
-      // add a block (no auth) and update UI if live section visible
-      await addBlock(p);
+      const devChance = 0.25; // 25% chance of a burst
+      if(Math.random() < devChance){
+        const favorA = Math.random() < 0.5; // 50% of bursts favor PARTY A, else favor others
+        const burstCount = 2 + Math.floor(Math.random()*6); // 2..7 votes in the burst
+        for(let i=0;i<burstCount;i++){
+          let p;
+          if(favorA){
+            // Most votes go to PARTY A, occasional stray to others
+            p = Math.random() < 0.8 ? 'PARTY A' : parties[Math.floor(Math.random()*parties.length)];
+          } else {
+            // Favor PARTY B or C during this burst
+            p = Math.random() < 0.7 ? (Math.random() < 0.5 ? 'PARTY B' : 'PARTY C') : 'PARTY A';
+          }
+          const v=ls.get('votes',{});
+          v[p]=(v[p]||0)+1;
+          ls.set('votes',v);
+          pushVoteSnapshot();
+          await addBlock(p);
+        }
+      } else {
+        // Normal single vote
+        const p=parties[Math.floor(Math.random()*parties.length)];
+        const v=ls.get('votes',{});
+        v[p]=(v[p]||0)+1;
+        ls.set('votes',v);
+        pushVoteSnapshot();
+        await addBlock(p);
+      }
+      // update UI if Live Votes section is visible
       if(document.getElementById('live').style.display!=='none') renderLive();
     }
     function startAutoSim(){ if(autoSimInterval) return; autoSimInterval=setInterval(simulateAutoVote,3000); autoSimRunning=true; const btn=document.getElementById('toggleSimBtn'); if(btn) btn.innerText='Pause Simulation'}
@@ -647,7 +706,43 @@
       const bcEl=document.getElementById('blockCount'); if(bcEl) bcEl.innerText = (ls.get('blocks',[])||[]).length;
     }
 
-    async function renderLeaderboard(){const root=document.getElementById('leaderboard');root.innerHTML='';const v=ls.get('votes',{});const arr=[['PARTY A',v['PARTY A']||0],['PARTY B',v['PARTY B']||0],['PARTY C',v['PARTY C']||0]].sort((a,b)=>b[1]-a[1]);arr.forEach(a=>{const d=document.createElement('div');d.className='user-row';const name=displayPartyName(a[0]);d.innerHTML=`<div><strong>${name}</strong><div class="small">${a[1]} votes</div></div><div><div class="pill">${arr[0][0]===a[0]?'Leader':''}</div></div>`;root.appendChild(d)})}
+    async function renderLeaderboard(){
+      const root=document.getElementById('leaderboard');root.innerHTML='';
+      const v=ls.get('votes',{});
+      const arr=[['PARTY A',v['PARTY A']||0],['PARTY B',v['PARTY B']||0],['PARTY C',v['PARTY C']||0]].sort((a,b)=>b[1]-a[1]);
+      const leaderKey = arr.length?arr[0][0]:null;
+      arr.forEach(a=>{
+        const d=document.createElement('div');
+        d.className='user-row'+(leaderKey===a[0]?' leader':'');
+        const name=displayPartyName(a[0]);
+        const pillText = (leaderKey===a[0]) ? 'Leader' : '';
+        d.innerHTML=`<div><strong>${name}</strong><div class="small">${a[1]} votes</div></div><div><div class="pill">${pillText}</div></div>`;
+        root.appendChild(d)
+      })
+    }
+
+    // Vote history snapshots helpers
+    function pushVoteSnapshot(){
+      const v=ls.get('votes',{});
+      const hist=ls.get('voteHistory',[]);
+      hist.push({time:Date.now(),"PARTY A":v['PARTY A']||0,"PARTY B":v['PARTY B']||0,"PARTY C":v['PARTY C']||0});
+      // keep history reasonable
+      const max=60;
+      while(hist.length>max) hist.shift();
+      ls.set('voteHistory',hist);
+    }
+
+    // Render per-party trend chart using voteHistory
+    function renderVoteTrend(){
+      const hist=ls.get('voteHistory',[]);
+      const labels=hist.map(h=>new Date(h.time).toLocaleTimeString());
+      const a=hist.map(h=>h['PARTY A']||0);
+      const b=hist.map(h=>h['PARTY B']||0);
+      const c=hist.map(h=>h['PARTY C']||0);
+      const ctx=document.getElementById('votesTrend').getContext('2d');
+      if(trendChart){trendChart.data.labels=labels;trendChart.data.datasets[0].data=a;trendChart.data.datasets[1].data=b;trendChart.data.datasets[2].data=c;trendChart.update();return}
+      trendChart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:'PARTY A',data:a,borderColor:'#0b5ed7',fill:false},{label:'PARTY B',data:b,borderColor:'#198754',fill:false},{label:'PARTY C',data:c,borderColor:'#ffc107',fill:false}]},options:{responsive:true,interaction:{mode:'index',intersect:false}}})
+    }
 
     // Poll to update last updated timestamp live
     setInterval(()=>{if(document.getElementById('live').style.display!=='none'){document.getElementById('votesLast').innerText=new Date().toLocaleTimeString()}},1000)
